@@ -21,7 +21,7 @@ const SignInScreen = () => {
         setForm({ ...form, [field]: value });
     };
 
-    const handleSignIp = () => {
+    const handleSignIn = () => {
         console.log("Вхід:", form);
         // Тут можна додати логіку реєстрації
     };
@@ -47,7 +47,6 @@ const SignInScreen = () => {
                                 Вхід
                             </Text>
 
-
                             <FormField
                                 title={"Пошта"}
                                 value={form.email}
@@ -64,9 +63,9 @@ const SignInScreen = () => {
                                 secureTextEntry={true}
                             />
 
-                            {/* Кнопка "Реєстрація" */}
+                            {/* Кнопка "Вхід" */}
                             <TouchableOpacity
-                                onPress={handleSignIp}
+                                onPress={handleSignIn}
                                 className="w-full bg-blue-500 p-4 rounded-lg mt-4"
                             >
                                 <Text className="text-white text-center text-lg font-bold">
@@ -80,7 +79,7 @@ const SignInScreen = () => {
                                 className="w-full bg-gray-300 p-4 rounded-lg mt-2"
                             >
                                 <Text className="text-black text-center text-lg font-medium">
-                                    У Вас немає акаунту? Реєстрація
+                                    Немає акаунту? Реєстрація
                                 </Text>
                             </TouchableOpacity>
                         </View>

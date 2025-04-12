@@ -86,7 +86,7 @@ const SignUpScreen = () => {
                                 className="w-full bg-gray-300 p-4 rounded-lg mt-2"
                             >
                                 <Text className="text-black text-center text-lg font-medium">
-                                    Вже є акаунт? Увійти
+                                    Є акаунт? Увійти
                                 </Text>
                             </TouchableOpacity>
                         </View>
