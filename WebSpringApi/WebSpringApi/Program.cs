@@ -1,9 +1,9 @@
+using WebSpringApi.Data;
+using WebSpringApi.Services;
+using WebSpringApi.Abstract;
+using WebSpringApi.Data.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebSpringApi.Abstract;
-using WebSpringApi.Data;
-using WebSpringApi.Data.Entities.Identity;
-using WebSpringApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

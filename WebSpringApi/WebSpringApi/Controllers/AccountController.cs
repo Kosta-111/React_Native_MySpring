@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using WebSpringApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
-using WebSpringApi.Abstract;
-using WebSpringApi.Data.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using WebSpringApi.Models.Account;
+using WebSpringApi.Data.Entities.Identity;
 
 namespace WebSpringApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
-public class AccountController(UserManager<UserEntity> userManager,
-IJwtTokenService jwtTokenService) : ControllerBase
+[Route("api/[controller]")]
+public class AccountController(
+    IJwtTokenService jwtTokenService,
+    UserManager<UserEntity> userManager
+    ) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)

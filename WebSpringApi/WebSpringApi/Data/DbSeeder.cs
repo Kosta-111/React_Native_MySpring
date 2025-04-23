@@ -1,11 +1,11 @@
 ﻿using System.Text;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using WebSpringApi.Abstract;
 using WebSpringApi.Constants;
-using WebSpringApi.Data.Entities.Identity;
 using WebSpringApi.Models.Seeder;
+using WebSpringApi.Data.Entities.Identity;
 
 namespace WebSpringApi.Data;
 
