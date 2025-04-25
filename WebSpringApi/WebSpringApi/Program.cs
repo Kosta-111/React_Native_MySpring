@@ -4,6 +4,7 @@ using WebSpringApi.Abstract;
 using WebSpringApi.Data.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,15 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web Spring v1"));
+
+var imagesFolger = builder.Configuration.GetValue<string>("ImagesDir") ?? "";
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, imagesFolger)),
+    RequestPath = $"/{imagesFolger}"
+});
 
 app.UseAuthorization();
 

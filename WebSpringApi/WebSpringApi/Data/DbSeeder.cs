@@ -37,7 +37,7 @@ public static class DbSeeder
                     var users = JsonConvert.DeserializeObject<List<SeederUserModel>>(jsonData)
                         ?? throw new JsonException();
                     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
-                    foreach(var user in users)
+                    foreach (var user in users)
                     {
                         var newUser = new UserEntity
                         {
@@ -49,11 +49,10 @@ public static class DbSeeder
                             Image = await imageService.SaveImageFromUrlAsync(user.Image)
                         };
                         var result = await userManager.CreateAsync(newUser, user.Password);
-                        if(result.Succeeded)
-                        {
+                        if (result.Succeeded)
                             await userManager.AddToRoleAsync(newUser, user.Role);
-                        }
-                        else Console.WriteLine($"--Error create user {user.Email}--");
+                        else 
+                            Console.WriteLine($"--Error create user {user.Email}--");
                     }
 
                 }
@@ -62,7 +61,8 @@ public static class DbSeeder
                     Console.WriteLine($"--Error parse json--{ex.Message}");
                 }
             }
-            else Console.WriteLine($"--Error open file {jsonFile}--");
+            else 
+                Console.WriteLine($"--Error open file {jsonFile}--");
         }
     }
 }

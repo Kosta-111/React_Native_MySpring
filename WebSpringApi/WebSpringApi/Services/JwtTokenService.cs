@@ -17,13 +17,15 @@ public class JwtTokenService(
     {
         var claims = new List<Claim>
         {
-            new Claim("email", user.Email),
-            new Claim("name", $"{user.Lastname} {user.Firstname}")
+            new("email", user.Email ?? ""),
+            new("name", $"{user.Lastname} {user.Firstname}"),
+            new("phone", user.PhoneNumber ?? ""),
+            new("image", user.Image ?? "")
         };
         var roles = await userManager.GetRolesAsync(user);
 
         foreach (var role in roles)
-            claims.Add(new Claim("roles", role));
+            claims.Add(new("roles", role));
 
         var key = Encoding.UTF8.GetBytes(configuration.GetValue<string>("JwtSecretKey") ??
             "adlfjalUIYUuihafy3498rt74k765gy32lNLJLhfasify93shfRQR##%^#&&^%@#$!sljdfl33");
