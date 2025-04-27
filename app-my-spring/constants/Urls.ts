@@ -1,0 +1,1 @@
+export const BASE_URL = "https://npd211api.itstep.click";

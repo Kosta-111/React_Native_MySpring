@@ -11,19 +11,29 @@ import {
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
-import { useRouter } from "expo-router"; // Використовуємо для навігації
+import { useRouter } from "expo-router";    // Використовуємо для навігації
+import { useLoginMutation } from "@/services/accountService";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const SignInScreen = () => {
     const router = useRouter(); // Ініціалізуємо роутер
     const [form, setForm] = useState({ email: "", password: "" });
+    const [login, { isLoading, error } ] = useLoginMutation();
 
     const handleChange = (field: string, value: string) => {
         setForm({ ...form, [field]: value });
     };
 
-    const handleSignIn = () => {
+    const handleSubmitLogin = async () => {
         console.log("Вхід:", form);
-        // Тут можна додати логіку реєстрації
+        try {
+            //unwrap - достає результат із відповіді
+            const result = await login(form).unwrap();
+            console.log("login begin", result);
+        }
+        catch {
+            console.log("Login is problem!!!");
+        }
     };
 
     return (
@@ -37,6 +47,8 @@ const SignInScreen = () => {
                         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
                         keyboardShouldPersistTaps="handled"
                     >
+                        <LoadingOverlay visible={isLoading} />
+
                         <View
                             className="w-full flex justify-center items-center my-6"
                             style={{
@@ -65,7 +77,7 @@ const SignInScreen = () => {
 
                             {/* Кнопка "Вхід" */}
                             <TouchableOpacity
-                                onPress={handleSignIn}
+                                onPress={handleSubmitLogin}
                                 className="w-full bg-blue-500 p-4 rounded-lg mt-4"
                             >
                                 <Text className="text-white text-center text-lg font-bold">
