@@ -14,6 +14,7 @@ import FormField from "@/components/FormField";
 import { useRouter } from "expo-router";    // Використовуємо для навігації
 import { useLoginMutation } from "@/services/accountService";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import * as SecureStore from 'expo-secure-store';
 
 const SignInScreen = () => {
     const router = useRouter(); // Ініціалізуємо роутер
@@ -30,9 +31,11 @@ const SignInScreen = () => {
             //unwrap - достає результат із відповіді
             const result = await login(form).unwrap();
             console.log("login begin", result);
+            await SecureStore.setItemAsync("JWT", result.token);
+            router.replace("/profile");
         }
-        catch {
-            console.log("Login is problem!!!");
+        catch (err) {
+            console.log("Login is problem:", err);
         }
     };
 

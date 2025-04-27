@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { createBaseQuery } from '@/utils/createBaseQuery'
-import { ILogin, ILoginResponse } from '@/interfaces/account'
+import { ILogin, ILoginResponse, IRegister } from '@/interfaces/account'
+import { serialize } from 'object-to-formdata';
 
 export const accountApi = createApi({
     reducerPath: 'accountApi',
@@ -17,7 +18,22 @@ export const accountApi = createApi({
                 }
             },
         }),
+
+        register: builder.mutation<void, IRegister>({
+            query: (data : IRegister) => {
+                try {
+                    const formData = serialize(data);
+                    return {
+                        url: 'register',
+                        method: 'POST',
+                        body: formData
+                    }
+                } catch {
+                    throw new Error("Error serializing the form data.");
+                }
+            },
+        }),
     })
 })
 
-export const { useLoginMutation } = accountApi;
+export const { useLoginMutation, useRegisterMutation } = accountApi;

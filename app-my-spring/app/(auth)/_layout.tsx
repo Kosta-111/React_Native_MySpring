@@ -43,6 +43,10 @@ export default function TabLayout() {
                 name="index"
                 options={{ href: null }} // Прибираємо "index" з вкладок
             />
+            <Tabs.Screen
+                name="profile"
+                options={{ href: null }} // Прибираємо "profile" з вкладок
+            />
         </Tabs>
     );
 }

@@ -11,19 +11,31 @@ import {
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
-import { useRouter } from "expo-router"; // Використовуємо для навігації
+import { useRouter } from "expo-router";
+import { useRegisterMutation } from "@/services/accountService";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import { Alert } from 'react-native';
 
 const SignUpScreen = () => {
     const router = useRouter(); // Ініціалізуємо роутер
-    const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const [form, setForm] = useState({ email: "", password: "", phoneNumber: "", firstname: "", lastname: "" });
+    const [register, { isLoading, error } ] = useRegisterMutation();
 
     const handleChange = (field: string, value: string) => {
         setForm({ ...form, [field]: value });
     };
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         console.log("Реєстрація:", form);
-        // Тут можна додати логіку реєстрації
+        try {
+            await register(form).unwrap();
+            console.log("registered successfully");
+            Alert.alert('Успіх', 'Реєстрація успішна!\nБудь ласка, увійдіть в акаунт)');
+            router.replace("/login");
+        }
+        catch (err) {
+            console.log("Register is problem:", err);
+        }
     };
 
     return (
@@ -37,6 +49,8 @@ const SignUpScreen = () => {
                         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
                         keyboardShouldPersistTaps="handled"
                     >
+                        <LoadingOverlay visible={isLoading} />
+
                         <View
                             className="w-full flex justify-center items-center my-6"
                             style={{
@@ -49,9 +63,23 @@ const SignUpScreen = () => {
 
                             <FormField
                                 title={"Ім'я"}
-                                value={form.name}
-                                handleChangeText={(value: string) => handleChange("name", value)}
+                                value={form.firstname}
+                                handleChangeText={(value: string) => handleChange("firstname", value)}
                                 placeholder={"Вкажіть ім'я"}
+                            />
+
+                            <FormField
+                                title={"Прізвище"}
+                                value={form.lastname}
+                                handleChangeText={(value: string) => handleChange("lastname", value)}
+                                placeholder={"Вкажіть прізвище"}
+                            />
+
+                            <FormField
+                                title={"Телефон"}
+                                value={form.phoneNumber}
+                                handleChangeText={(value: string) => handleChange("phoneNumber", value)}
+                                placeholder={"Вкажіть телефон"}
                             />
 
                             <FormField
