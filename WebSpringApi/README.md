@@ -15,22 +15,22 @@ docker images --all
 docker rmi npd211-asp-api
 
 docker login
-docker tag npd211-asp-api:latest novakvova/npd211-asp-api:latest
-docker push novakvova/npd211-asp-api:latest
+docker tag npd211-asp-api:latest kosta111/npd211-asp-api:latest
+docker push kosta111/npd211-asp-api:latest
 
-docker pull novakvova/npd211-asp-api:latest
+docker pull kosta111/npd211-asp-api:latest
 docker ps -a
-docker run -d --restart=always --name npd211-asp_container -p 4759:8080 novakvova/npd211-asp-api
+docker run -d --restart=always --name npd211-asp_container -p 4759:8080 kosta111/npd211-asp-api
 
-docker run -d --restart=always -v /volumes/npd211-asp/images:/app/uploading --name npd211-asp_container -p 4759:8080 novakvova/npd211-asp-api
+docker run -d --restart=always -v /volumes/npd211-asp/images:/app/uploading --name npd211-asp_container -p 4759:8080 kosta111/npd211-asp-api
 
 
-docker pull novakvova/npd211-asp-api:latest
+docker pull kosta111/npd211-asp-api:latest
 docker images --all
 docker ps -a
 docker stop npd211-asp_container
 docker rm npd211-asp_container
-docker run -d --restart=always --name npd211-asp_container -p 4759:8080 novakvova/npd211-asp-api
+docker run -d --restart=always --name npd211-asp_container -p 4759:8080 kosta111/npd211-asp-api
 ```
 
 ```nginx options /etc/nginx/sites-available/default

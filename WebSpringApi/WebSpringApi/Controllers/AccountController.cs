@@ -1,21 +1,23 @@
-﻿using WebSpringApi.Abstract;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using WebSpringApi.Abstract;
+using WebSpringApi.Constants;
 using WebSpringApi.Models.Account;
 using WebSpringApi.Data.Entities.Identity;
-using WebSpringApi.Constants;
 
 namespace WebSpringApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class AccountController(
+    IMapper mapper,
     IImageService imageService,
     IJwtTokenService jwtTokenService,
     UserManager<UserEntity> userManager
     ) : ControllerBase
 {
-    [HttpPost("login")]
+    [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)
     {
         try
@@ -36,7 +38,7 @@ public class AccountController(
         }
     }
 
-    [HttpPost("register")]
+    [HttpPost]
     public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
     {
         try
@@ -45,22 +47,17 @@ public class AccountController(
             if (user is not null) 
                 throw new Exception($"Користувач {model.Email} вже зареєстрований!");
 
-            var newUser = new UserEntity
-            {
-                UserName = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Email = model.Email,
-                Firstname = model.Firstname,
-                Lastname = model.Lastname,
-                Image = model.Image is null ? null : 
-                        await imageService.SaveImageAsync(model.Image)
-            };
+            var newUser = mapper.Map<UserEntity>(model);
+
+            newUser.Image = model.Image is null ? null : 
+                await imageService.SaveImageAsync(model.Image);
+
             var result = await userManager.CreateAsync(newUser, model.Password);
             
             if (result.Succeeded)
                 await userManager.AddToRoleAsync(newUser, Roles.User);
             else
-                throw new Exception($"error create user {model.Email}");
+                throw new Exception($"Помилка створення користувача {model.Email}");
 
             return Created();
         }

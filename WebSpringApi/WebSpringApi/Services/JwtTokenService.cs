@@ -18,9 +18,8 @@ public class JwtTokenService(
         var claims = new List<Claim>
         {
             new("email", user.Email ?? ""),
-            new("name", $"{user.Lastname} {user.Firstname}"),
-            new("phone", user.PhoneNumber ?? ""),
-            new("image", user.Image ?? "")
+            new("image", user.Image ?? ""),
+            new("name", $"{user.Lastname} {user.Firstname}")
         };
         var roles = await userManager.GetRolesAsync(user);
 

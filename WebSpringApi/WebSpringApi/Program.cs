@@ -24,6 +24,8 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
@@ -41,11 +43,12 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web Spring v1"));
 
 var imagesFolger = builder.Configuration.GetValue<string>("ImagesDir") ?? "";
+var dirSave = Path.Combine(builder.Environment.ContentRootPath, imagesFolger);
+Directory.CreateDirectory(dirSave);
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-           Path.Combine(builder.Environment.ContentRootPath, imagesFolger)),
+    FileProvider = new PhysicalFileProvider(dirSave),
     RequestPath = $"/{imagesFolger}"
 });
 
