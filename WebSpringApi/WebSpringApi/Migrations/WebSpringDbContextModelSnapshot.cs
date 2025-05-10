@@ -17,7 +17,7 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
     {
 #pragma warning disable 612, 618
         modelBuilder
-            .HasAnnotation("ProductVersion", "9.0.3")
+            .HasAnnotation("ProductVersion", "9.0.4")
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -130,6 +130,37 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
                 b.HasKey("UserId", "LoginProvider", "Name");
 
                 b.ToTable("AspNetUserTokens", (string)null);
+            });
+
+        modelBuilder.Entity("WebSpringApi.Data.Entities.CategoryEntity", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                b.Property<string>("Description")
+                    .HasMaxLength(4000)
+                    .HasColumnType("character varying(4000)");
+
+                b.Property<string>("Image")
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.Property<long>("UserId")
+                    .HasColumnType("bigint");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("tblCategories");
             });
 
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.RoleEntity", b =>
@@ -285,6 +316,17 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
                     .IsRequired();
             });
 
+        modelBuilder.Entity("WebSpringApi.Data.Entities.CategoryEntity", b =>
+            {
+                b.HasOne("WebSpringApi.Data.Entities.Identity.UserEntity", "User")
+                    .WithMany("Categories")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("User");
+            });
+
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.UserRoleEntity", b =>
             {
                 b.HasOne("WebSpringApi.Data.Entities.Identity.RoleEntity", "Role")
@@ -311,6 +353,8 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.UserEntity", b =>
             {
+                b.Navigation("Categories");
+
                 b.Navigation("UserRoles");
             });
 #pragma warning restore 612, 618

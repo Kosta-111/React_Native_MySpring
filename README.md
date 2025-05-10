@@ -74,3 +74,11 @@ Run App Hotkey
 › Press o │ open project code in your edito
 ```
 
+Run Server App
+```
+sudo apt install dos2unix
+dos2unix docker_npd211.sh
+
+chmod +x docker_npd211.sh
+./docker_npd211.sh
+```
