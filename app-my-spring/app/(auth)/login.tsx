@@ -14,12 +14,17 @@ import FormField from "@/components/FormField";
 import { useRouter } from "expo-router";    // Використовуємо для навігації
 import { useLoginMutation } from "@/services/accountService";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import * as SecureStore from 'expo-secure-store';
+import {useAppDispatch} from "@/store";
+import {saveToSecureStore} from "@/utils/secureStore";
+import {setCredentials} from "@/store/slices/userSlice";
+import {jwtParse} from "@/utils/jwtParser";
+import {IUser} from "@/interfaces/account";
 
 const SignInScreen = () => {
     const router = useRouter(); // Ініціалізуємо роутер
     const [form, setForm] = useState({ email: "", password: "" });
     const [login, { isLoading, error } ] = useLoginMutation();
+    const dispatch = useAppDispatch(); // Використовуємо dispatch з Redux
 
     const handleChange = (field: string, value: string) => {
         setForm({ ...form, [field]: value });
@@ -30,8 +35,10 @@ const SignInScreen = () => {
         try {
             //unwrap - достає результат із відповіді
             const result = await login(form).unwrap();
-            console.log("login begin", result);
-            await SecureStore.setItemAsync("JWT", result.token);
+            const {token} = result;
+            await saveToSecureStore('authToken', token)
+            dispatch(setCredentials({ user: jwtParse(token) as IUser, token }));
+            // console.log("login begin", result);
             router.replace("/profile");
         }
         catch (err) {
@@ -61,6 +68,16 @@ const SignInScreen = () => {
                             <Text className="text-3xl font-bold mb-6 text-black">
                                 Вхід
                             </Text>
+
+                            {error ? (
+                                <View className="p-4 mb-4 text-sm text-red-800 bg-red-50 border border-red-300 rounded-lg" role="alert">
+                                    <Text className="font-semibold">
+                                        {'data' in error && error.data && typeof error.data === 'object' && 'error' in error.data
+                                            ? (error.data as any).error
+                                            : 'Something went wrong'}
+                                    </Text>
+                                </View>
+                            ) : null}
 
                             <FormField
                                 title={"Пошта"}

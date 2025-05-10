@@ -7,20 +7,24 @@ export interface ILoginResponse {
     token: string;
 }
 
-export interface IRegister {
-    email: string;
-    password: string;
-    phoneNumber: string | null;
-    firstname: string | null;
-    lastname: string | null;
+export interface IUser {
+    id: number
+    name: string
+    email: string
+    image: string
+    exp: number
 }
 
-export interface IJwtPayload {
-    name: string;
+export interface IUserState {
+    user: IUser | null
+    token: string | null
+}
+
+export interface IRegister {
+    firstname: string;
+    lastname: string;
+    phoneNumber: string;
     email: string;
-    phone: string;
-    image: string;
-    roles: string;
-    exp: number;
-    // інші поля, якщо є
+    password: string;
+    image: File | null
 }

@@ -21,15 +21,11 @@ export const accountApi = createApi({
 
         register: builder.mutation<void, IRegister>({
             query: (data : IRegister) => {
-                try {
-                    const formData = serialize(data);
-                    return {
-                        url: 'register',
-                        method: 'POST',
-                        body: formData
-                    }
-                } catch {
-                    throw new Error("Error serializing the form data.");
+                const formData = serialize(data);
+                return {
+                    url: 'register',
+                    method: 'POST',
+                    body: formData
                 }
             },
         }),
