@@ -21,7 +21,7 @@ const ProfileScreen = () => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const user = useAppSelector((state) => state.user.user);
+    const user = useAppSelector((state) => state.auth.user);
 
     const handleLogout = async () => {
         await removeFromSecureStore('authToken');
