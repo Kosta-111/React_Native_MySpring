@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using WebSpringApi.Abstract;
 using WebSpringApi.Constants;
 using WebSpringApi.Models.Account;
@@ -60,6 +61,28 @@ public class AccountController(
                 throw new Exception($"Помилка створення користувача {model.Email}");
 
             return Created();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        try
+        {
+            var userEmail = User.Claims.FirstOrDefault()?.Value
+                ?? throw new Exception("user email undefined");
+
+            var user = await userManager.FindByEmailAsync(userEmail)
+                ?? throw new Exception($"user by email {userEmail} not found");
+
+            var userModel = mapper.Map<UserInfoViewModel>(user);
+
+            return Ok(userModel);
         }
         catch (Exception ex)
         {

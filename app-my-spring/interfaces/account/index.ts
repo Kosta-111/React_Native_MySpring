@@ -28,3 +28,11 @@ export interface IRegister {
     password: string;
     image: File | null
 }
+
+export interface IUserInfo {
+    email: string;
+    firstname: string | null;
+    lastname: string | null;
+    phoneNumber: string | null;
+    image: string | null;
+}

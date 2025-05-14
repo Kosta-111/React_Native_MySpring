@@ -3,9 +3,7 @@ import {
     SafeAreaView,
     StyleSheet,
     ScrollView,
-    View,
-    Text,
-    Image,
+    View, Text, Image,
     KeyboardAvoidingView,
     Platform,
     Dimensions, TouchableOpacity
@@ -16,12 +14,16 @@ import {useAppDispatch, useAppSelector} from "@/store";
 import {useRouter} from "expo-router";
 import {removeFromSecureStore} from "@/utils/secureStore";
 import {logOut} from "@/store/slices/userSlice";
+import {useGetUserInfoQuery} from "@/services/accountService";
 
 const ProfileScreen = () => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const user = useAppSelector((state) => state.auth.user);
+
+    //const user = useAppSelector((state) => state.auth.user);
+    const token = useAppSelector((state) => state.auth.token);
+    const { data: user, isLoading, error } = useGetUserInfoQuery(token);
 
     const handleLogout = async () => {
         await removeFromSecureStore('authToken');
@@ -51,7 +53,7 @@ const ProfileScreen = () => {
                             {user ? (
                                     <>
                                         <Image
-                                            source={{ uri: `${IMAGES_URL}/400_${user?.image}` }}
+                                            source={{ uri: `${IMAGES_URL}/400_${user.image}` }}
                                             style={{
                                                 width: windowWidth - 40, // наприклад, відступи по 20 з кожного боку
                                                 height: windowWidth - 40, // або іншу висоту для правильного співвідношення
@@ -61,11 +63,15 @@ const ProfileScreen = () => {
                                         />
 
                                         <Text className="text-3xl font-bold my-6 text-black">
-                                            {user?.name}
+                                            {user.firstname} {user.lastname}
                                         </Text>
 
                                         <Text className="text-2xl font-bold mb-6 text-black">
-                                            Пошта: {user?.email}
+                                            Пошта: {user.email}
+                                        </Text>
+
+                                        <Text className="text-2xl font-bold mb-6 text-black">
+                                            Телефон: {user.phoneNumber}
                                         </Text>
 
                                         <TouchableOpacity
