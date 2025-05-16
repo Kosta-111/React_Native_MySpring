@@ -15,6 +15,7 @@ import {useRouter} from "expo-router";
 import {removeFromSecureStore} from "@/utils/secureStore";
 import {logOut} from "@/store/slices/userSlice";
 import {useGetUserInfoQuery} from "@/services/accountService";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const ProfileScreen = () => {
 
@@ -44,6 +45,8 @@ const ProfileScreen = () => {
                         contentContainerStyle={{flexGrow: 1, paddingHorizontal: 20}}
                         keyboardShouldPersistTaps="handled"
                     >
+                        <LoadingOverlay visible={isLoading} />
+
                         <View
                             className="w-full flex justify-center items-start my-6"
                             style={{
