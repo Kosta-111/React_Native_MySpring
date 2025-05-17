@@ -42,6 +42,27 @@ public class CategoriesController(
         }
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCategory(int id)
+    {
+        try
+        {
+            var userId = await GetUserId()
+                ?? throw new Exception("user not found!");
+
+            var category = context.Categories
+                .FirstOrDefault(x => x.UserId == userId && x.Id == id);
+
+            return category is null
+                ? NotFound() 
+                : Ok(mapper.Map<CategoryItemViewModel>(category));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
     {
