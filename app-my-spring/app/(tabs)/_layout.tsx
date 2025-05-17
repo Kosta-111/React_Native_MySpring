@@ -42,7 +42,6 @@ export default function TabLayout() {
                     tabBarIcon: ({color}) => <IconSymbol size={28} name="category.fill" color={color}/>,
                 }}
             />
-
         </Tabs>
     );
 }

@@ -1,15 +1,13 @@
-import {View, Text, StyleSheet, FlatList} from "react-native";
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from "react-native";
 import {useRouter} from "expo-router";
-import {useAppDispatch, useAppSelector} from "@/store";
 import {useGetCategoriesQuery} from "@/services/categoriesService";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import CategoryCard from "@/components/category/CategoryCard";
+import React from "react";
 
 const CategoriesScreen = () => {
-    const dispatch = useAppDispatch();
     const router = useRouter();
-    const token = useAppSelector((state) => state.auth.token);
-    const {data: categories, isLoading, error} = useGetCategoriesQuery(token);
+    const {data: categories, isLoading, error} = useGetCategoriesQuery();
 
     console.log("data", categories);
     console.log("error", error);
@@ -18,6 +16,17 @@ const CategoriesScreen = () => {
         <View>
             <Text style={styles.title}>Категорії</Text>
             <LoadingOverlay visible={isLoading} />
+
+            {/* Кнопка "Створити" */}
+            <TouchableOpacity
+                onPress={() => router.push("/category/create")}
+                className="w-1/2 bg-green-600 p-4 rounded-lg m-4"
+            >
+                <Text className="text-white text-center text-lg font-medium">
+                    Додати категорію
+                </Text>
+            </TouchableOpacity>
+
             {categories && (
                 <FlatList
                     data={categories}
@@ -28,7 +37,10 @@ const CategoriesScreen = () => {
                     numColumns={2}
                     renderItem={({ item }) => (
                         <View className="w-[49%] pb-5">
-                            <CategoryCard category={item} />
+                            <CategoryCard
+                                category={item}
+                                onPress={() => router.push(`/category/${item.id}`)}
+                            />
                         </View>
                     )}
                 />

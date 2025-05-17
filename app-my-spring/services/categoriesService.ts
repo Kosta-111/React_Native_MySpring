@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from '@/utils/createBaseQuery';
-import { ICategoryItem } from "@/interfaces/category";
+import { ICategoryCreateRequest, ICategoryEditRequest, ICategoryIdResponse, ICategoryItem } from "@/interfaces/category";
+import { serialize } from "object-to-formdata";
 
 export const categoriesApi = createApi( {
     reducerPath: 'categoriesApi',
@@ -8,19 +9,66 @@ export const categoriesApi = createApi( {
     tagTypes: ['Categories'],
 
     endpoints: (builder) => ( {
-        getCategories: builder.query<ICategoryItem[], string | null>( {
-            query: (token) => {
+        getCategories: builder.query<ICategoryItem[], void>( {
+            query: () => {
                 return {
                     url: '',
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                    method: 'GET'
                 }
             },
+            providesTags: ['Categories']
         }),
-        //todo other
+
+        getCategory: builder.query<ICategoryItem, number>( {
+            query: (id) => {
+                return {
+                    url: `${id}`,
+                    method: 'GET'
+                }
+            },
+            providesTags: ['Categories']
+        }),
+
+        createCategory: builder.mutation<ICategoryIdResponse, ICategoryCreateRequest>( {
+            query: (model) => {
+                const formData = serialize(model);
+                return {
+                    url: '',
+                    method: 'POST',
+                    body: formData
+                }
+            },
+            invalidatesTags: ['Categories']
+        }),
+
+        updateCategory: builder.mutation<ICategoryIdResponse, ICategoryEditRequest>( {
+            query: (model) => {
+                const formData = serialize(model);
+                return {
+                    url: '',
+                    method: 'PUT',
+                    body: formData
+                }
+            },
+            invalidatesTags: ['Categories']
+        }),
+
+        deleteCategory: builder.mutation<void, number>( {
+            query: (id) => {
+                return {
+                    url: `${id}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags: ['Categories']
+        }),
     })
 })
 
-export const { useGetCategoriesQuery } = categoriesApi;
+export const {
+    useGetCategoriesQuery,
+    useGetCategoryQuery,
+    useCreateCategoryMutation,
+    useUpdateCategoryMutation,
+    useDeleteCategoryMutation
+} = categoriesApi;
