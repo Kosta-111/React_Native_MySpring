@@ -20,7 +20,7 @@ const CategoriesScreen = () => {
             {/* Кнопка "Створити" */}
             <TouchableOpacity
                 onPress={() => router.push("/category/create")}
-                className="w-1/2 bg-green-600 p-4 rounded-lg m-4"
+                className="w-5/12 bg-green-600 p-4 rounded-lg m-4"
             >
                 <Text className="text-white text-center text-lg font-medium">
                     Додати категорію
