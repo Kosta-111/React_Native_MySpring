@@ -163,6 +163,59 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("tblCategories");
             });
 
+        modelBuilder.Entity("WebSpringApi.Data.Entities.DishEntity", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                b.Property<int>("CategoryId")
+                    .HasColumnType("integer");
+
+                b.Property<string>("Description")
+                    .HasMaxLength(4000)
+                    .HasColumnType("character varying(4000)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
+
+                b.Property<double>("Price")
+                    .HasColumnType("double precision");
+
+                b.HasKey("Id");
+
+                b.HasIndex("CategoryId");
+
+                b.ToTable("tblDishes");
+            });
+
+        modelBuilder.Entity("WebSpringApi.Data.Entities.DishImageEntity", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                b.Property<int>("DishId")
+                    .HasColumnType("integer");
+
+                b.Property<string>("Image")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("DishId");
+
+                b.ToTable("tblDishImages");
+            });
+
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.RoleEntity", b =>
             {
                 b.Property<long>("Id")
@@ -327,6 +380,28 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("User");
             });
 
+        modelBuilder.Entity("WebSpringApi.Data.Entities.DishEntity", b =>
+            {
+                b.HasOne("WebSpringApi.Data.Entities.CategoryEntity", "Category")
+                    .WithMany("Dishes")
+                    .HasForeignKey("CategoryId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Category");
+            });
+
+        modelBuilder.Entity("WebSpringApi.Data.Entities.DishImageEntity", b =>
+            {
+                b.HasOne("WebSpringApi.Data.Entities.DishEntity", "Dish")
+                    .WithMany("DishImages")
+                    .HasForeignKey("DishId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Dish");
+            });
+
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.UserRoleEntity", b =>
             {
                 b.HasOne("WebSpringApi.Data.Entities.Identity.RoleEntity", "Role")
@@ -344,6 +419,16 @@ partial class WebSpringDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("Role");
 
                 b.Navigation("User");
+            });
+
+        modelBuilder.Entity("WebSpringApi.Data.Entities.CategoryEntity", b =>
+            {
+                b.Navigation("Dishes");
+            });
+
+        modelBuilder.Entity("WebSpringApi.Data.Entities.DishEntity", b =>
+            {
+                b.Navigation("DishImages");
             });
 
         modelBuilder.Entity("WebSpringApi.Data.Entities.Identity.RoleEntity", b =>

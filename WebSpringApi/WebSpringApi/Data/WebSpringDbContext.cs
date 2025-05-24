@@ -11,10 +11,13 @@ public class WebSpringDbContext : IdentityDbContext<UserEntity, RoleEntity, long
         : base(options) { }
 
     public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<DishEntity> Dishes { get; set; }
+    public DbSet<DishImageEntity> DishImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
         builder.Entity<UserRoleEntity>(ur =>
         {
             ur.HasOne(ur => ur.Role)
@@ -27,5 +30,17 @@ public class WebSpringDbContext : IdentityDbContext<UserEntity, RoleEntity, long
                 .HasForeignKey(u => u.UserId)
                 .IsRequired();
         });
+
+        builder.Entity<DishImageEntity>()
+            .HasOne(e => e.Dish)
+            .WithMany(e => e.DishImages)
+            .HasForeignKey(e => e.DishId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<DishEntity>()
+           .HasOne(e => e.Category)
+           .WithMany(e => e.Dishes)
+           .HasForeignKey(e => e.CategoryId)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }

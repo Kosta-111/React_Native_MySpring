@@ -8,6 +8,7 @@ using WebSpringApi.Models.Category;
 using WebSpringApi.Data.Entities.Identity;
 using WebSpringApi.Abstract;
 using WebSpringApi.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebSpringApi.Controllers;
 
@@ -104,15 +105,25 @@ public class CategoriesController(
     [HttpDelete("{id}")]
     public IActionResult Remove(int id)
     {
-        var category = context.Categories.SingleOrDefault(x => x.Id == id);
+        var category = context.Categories
+            .Include(x => x.Dishes!)
+                .ThenInclude(x => x.DishImages)
+            .SingleOrDefault(x => x.Id == id);
         
         if (category is null) return NotFound();
 
+        //delete category image and dishes images
+        var images = category.Dishes?.SelectMany(x => x.DishImages).Select(x => x.Image).ToList() ?? [];
         if (category.Image is not null)
         {
-            imageService.DeleteImageIfExists(category.Image);
+            images.Add(category.Image);
         }
-        context.Categories.Remove(category);
+        foreach (var image in images)
+        {
+            imageService.DeleteImageIfExists(image);
+        }
+
+        context.Categories.Remove(category); //cascade
         context.SaveChanges();
         return Ok();
     }
