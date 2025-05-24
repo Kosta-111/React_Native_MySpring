@@ -15,6 +15,8 @@ const MAPPING = {
   'person.crop.circle': 'person',
   'chevron.right': 'chevron-right',
   'category.fill': 'category',
+  'delete.fill': 'delete',
+  'edit.fill': 'edit',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

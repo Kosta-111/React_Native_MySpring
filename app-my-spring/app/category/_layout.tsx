@@ -1,4 +1,3 @@
-import {useColorScheme} from "@/hooks/useColorScheme";
 import {Stack} from "expo-router";
 import React from "react";
 

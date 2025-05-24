@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView} from "react-native";
 import {useRouter} from "expo-router";
 import {useGetCategoriesQuery} from "@/services/categoriesService";
 import LoadingOverlay from "@/components/LoadingOverlay";
